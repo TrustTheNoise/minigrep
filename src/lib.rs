@@ -40,6 +40,7 @@ fn out_of_string(finding_lines: &Vec<&str>, config: &Config)
         }
     }else
     {
+
         for lines in finding_lines
         {
             for words in lines.split_whitespace()
@@ -89,13 +90,21 @@ pub struct Config
 }
 
 impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
+    pub fn build(
+        mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
+        //if args.len() < 3 {
+        //    return Err("not enough arguments");
+        //}
 
-        let query = args[1].clone();
-        let file_path = args[2].clone();
+        let query = match args.next(){
+            Some(str) => str,
+            None => return Err("Didn't get a query string"),
+        };
+        let file_path = match args.next(){
+            Some(str) => str,
+            None => return Err("Didn't get a file path"),
+        };
 
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 

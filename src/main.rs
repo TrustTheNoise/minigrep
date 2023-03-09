@@ -1,13 +1,12 @@
+
 use std::{process, env};
 use minigrep::Config;
 
 fn main() {
-    // --snip--
-    let args: Vec<String> = env::args().collect();
 
-    let conf = Config::build(&args).unwrap_or_else(|err| 
+    let conf = Config::build(env::args()).unwrap_or_else(|err| 
         {
-            println!("Error: {err}");
+            eprintln!("Error: {err}");
             process::exit(1);
         });
 
@@ -16,7 +15,7 @@ fn main() {
 
     if let Err(e) = minigrep::run(&conf)
     {
-        println!("Error: {e}");
+        eprintln!("Error: {e}");
         process::exit(1);
     };
 }
